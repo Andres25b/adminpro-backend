@@ -2,8 +2,8 @@
 // * IMPORTACIONES
 // * =============
 require('dotenv').config();
-const cors = require('cors');
 const express = require('express');
+const cors = require('cors');
 const { dbConnection } = require('./database/config');
 
 // * ======================
@@ -16,6 +16,11 @@ const app = express();
 // * ================
 app.use(cors());
 
+// * ===========================
+// * LESCTURA Y PARSEO DEL BODY
+// * ===========================
+app.use(express.json());
+
 // * =============
 // * BASE DE DATOS
 // * =============
@@ -24,12 +29,8 @@ dbConnection();
 // * =====
 // * Rutas
 // * =====
-app.get('/', (req, res) => {
-	res.json({
-		ok: true,
-		message: 'Hola Mundo',
-	});
-});
+app.use('/api/usuarios', require('./routes/usuarios.route'));
+app.use('/api/login', require('./routes/auth.route'));
 
 app.listen(process.env.PORT, () =>
 	console.log(`Servidor corriendo en el puerto: ${process.env.PORT}`)
